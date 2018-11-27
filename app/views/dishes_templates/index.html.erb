@@ -13,13 +13,21 @@
         <p class="lead">Narrow results:</p>
     
         <div class="form-group">
-          <%= f.label :name_cont, "Name contains" %>
+          <label>
+            <%= f.label :name_cont, "Name contains" %>
+          </label>
           <%= f.text_field :name_cont, :class => "form-control", :placeholder => "Name contains" %>
         </div>
-      
-        <div class="form-group">
-          <%= f.label :cuisine_name_cont, "Cuisine name contains" %>
-          <%= f.text_field :cuisine_name_cont, :class => "form-control", :placeholder => "Cuisine name contains" %>
+        
+        <!--this is check boxes-->
+        <div class = "form-group">
+          <% Cuisine.all.each do |cuisine| %>
+            <label>
+              <%= check_box_tag('q[cuisine_id_eq_any][]', cuisine.id, (true if @q.cuisine_id_eq_any.try(:include?, cuisine.id))) %>
+              <%= cuisine.name %>
+            </label>
+            <br>
+          <% end %>
         </div>
       
         <%= f.submit :class => "btn btn-primary btn-block mb-1" %>
@@ -72,8 +80,8 @@
               </button>
             </form>
           <% else %>
-            <a href = "/venues/<%=Venue.find(Bookmark.find_by(dish_id: dish.id, user_id: current_user.id).id).id%>">
-              <%= Venue.find(Bookmark.find_by(dish_id: dish.id, user_id: current_user.id).id).name %>
+            <a href = "/venues/<%=Venue.find(Bookmark.find_by(dish_id: dish.id, user_id: current_user.id).venue_id).id%>">
+              <%= Venue.find(Bookmark.find_by(dish_id: dish.id, user_id: current_user.id).venue_id).name %>
             </a>
           <% end %>
         </td>

@@ -15,8 +15,9 @@
     </div>
 
     <div class="form-group">
-      <%= f.label :bookmarks_notes_cont, "Bookmark notes contains" %>
-      <%= f.text_field :bookmarks_notes_cont, :class => "form-control", :placeholder => "Bookmark notes contains" %>
+      <!--recall that specialties is a has_many in venue.rb, specialties is the method (i.e. can do venue_name.specialties), this returns the bookmarked dishes for that venue, as we are searching through venues, we can treat specialties like we treat name (a part of the Venue class) above, specialties_name_cont means we take the user input and match it with the name category in the dishes associated with that venue (the specialties) -->
+      <%= f.label :specialties_name_cont, "Bookmarked dish name contains" %>
+      <%= f.text_field :specialties_name_cont, :class => "form-control", :placeholder => "Bookmarked dish name contains" %>
     </div>
 
     <div class="form-group">
@@ -43,31 +44,25 @@
       <tr>
         <div id="location_map" style="height: 480px;"></div>
       </tr>
-      
-      <tr>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Neighborhood</th>
-        <th>Actions</th>
-      </tr>
 
       <% @venues.each do |venue| %>
-      <tr>
-        <td><%= venue.name %></td>
-        <td><%= venue.address %></td>
-        <td>
-          <% if venue.neighborhood.present? %>
-            <a href="/neighborhoods/<%= venue.neighborhood.id %>">
-              <%= venue.neighborhood.name %>
-            </a>
-          <% end %>
-        </td>
-        <td>
-          <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
-          <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
-        </td>
-      </tr>
+        <!--investigates if the user has a bookmark with the current venue-->
+        <% if Bookmark.find_by(venue_id: venue.id, user_id: current_user.id).present? %>
+          <tr>
+            <td>
+              <a href = "/venues/<%= venue.id%>">
+                <%= venue.name %>
+              </a>
+            </td>
+            
+            <td>
+              <% if venue.neighborhood.present? %>
+                <%= venue.neighborhood.name %>
+              <% end %>
+            </td>
+          
+          </tr>
+        <% end %>
       <% end %>
     </table>
     
