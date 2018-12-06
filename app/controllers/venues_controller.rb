@@ -1,5 +1,6 @@
 class VenuesController < ApplicationController
   def index
+    #Guide: https://gist.github.com/raghubetina/d5fc3df67ddbadcac271
     @q = Venue.ransack(params.fetch("q", nil))
     @venues = @q.result(:distinct => true).includes(:bookmarks, :neighborhood, :fans, :specialties).page(params.fetch("page", nil)).per(10)
 
