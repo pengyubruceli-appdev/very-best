@@ -1,169 +1,175 @@
-<div class="page-header">
-  <h3>Venue #<%= @venue.id %></h3>
-</div>
-
-<div class="row">
-  <div class="col-md-12 mb-2">
-    <dl class="dl-horizontal">
-      <dt>Name</dt>
-      <dd><%= @venue.name %></dd>
-
-      <dt>Address</dt>
-      <dd>
-        <div>
-          <div id="location_map" style="height: 480px;"></div>
-        </div>
-      </dd>
-
-      <dt>Neighborhood</dt>
-      <dd>
-        <% if @venue.neighborhood.present? %>
-          <a href="/neighborhoods/<%= @venue.neighborhood_id %>">
-            <%= @venue.neighborhood.name %>
+<div class = "row">
+  <!--padding-->
+  <div class = "col-md-3">
+    
+  </div>
+  
+  <div class = "col-md-6">
+    <div class = "card">
+      <div class = "card-header">
+        <dt>
+          <h4><%= @venue.name %></h4>
+          <h6>        
+            <% if @venue.neighborhood.present? %>
+              <a href="/neighborhoods/<%= @venue.neighborhood_id %>">
+                <%= @venue.neighborhood.name %>
+              </a>
+            <% end %>
+          </h6>
+          <h6><%= @venue.address %></h6>
+        </dt>
+      </div>
+      
+          <dd>
+            <div>
+              <div id="location_map" style="height: 480px;"></div>
+            </div>
+          </dd>
+    
+        </dl>
+    
+        <div class="btn-group btn-group-justified">
+          <a href="/venues" class="btn btn-primary">
+            Back
           </a>
-        <% end %>
-      </dd>
-
-    </dl>
-
-    <div class="btn-group btn-group-justified">
-      <a href="/venues" class="btn btn-primary">
-        Back
-      </a>
-      <a href="/venues/<%= @venue.id %>/edit" class="btn btn-warning">
-        Edit
-      </a>
-      <a href="/delete_venue/<%= @venue.id %>" class="btn btn-danger" rel="nofollow">
-        Delete
-      </a>
+          <a href="/venues/<%= @venue.id %>/edit" class="btn btn-warning">
+            Edit
+          </a>
+          <a href="/delete_venue/<%= @venue.id %>" class="btn btn-danger" rel="nofollow">
+            Delete
+          </a>
+        </div>
+      
+      <!-- A Venue has many bookmarks -->
+      
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-info">
+              Bookmarks
+            </li>
+      
+            <% @venue.bookmarks.each do |bookmark| %>
+              <li class="list-group-item">
+                <a href="/bookmarks/<%= bookmark.id %>">
+                  <%= bookmark.notes %>
+                </a>
+                <div class="btn-group btn-group-xs float-right">
+                  <a href="/bookmarks/<%= bookmark.id %>" class="btn btn-primary">
+                    <i class="fa fa-search-plus"></i>
+                  </a>
+                  <a href="/bookmarks/<%= bookmark.id %>/edit" class="btn btn-warning">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a href="/delete_bookmark/<%= bookmark.id %>" class="btn btn-danger" rel="nofollow">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </div>
+              </li>
+            <% end %>
+      
+            <li class="list-group-item">
+              <form action="/create_bookmark" method="post">
+      
+            <!-- Label and input for dish_id -->
+            <div class="form-group">
+              <label for="dish_id" class="control-label">
+                Dish
+              </label>
+      
+              <%= select_tag(:dish_id, options_from_collection_for_select(Dish.all, :id, :name), :class => "form-control") %>
+            </div>
+      
+            <!-- Label and input for venue_id -->
+            <input type="hidden" name="venue_id" value="<%= @venue.id %>">
+      
+            <!-- Label and input for user_id -->
+            <input type="hidden" name="user_id" value="<%= current_user.id %>">
+      
+            <!-- Label and input for notes -->
+            <div class="form-group">
+              <label for="notes" class="control-label">
+                Notes
+              </label>
+      
+              <textarea id="notes" name="notes" placeholder="Notes" class="form-control" rows="3"></textarea>
+            </div>
+      
+            <button class="btn btn-block btn-success">
+              Create Bookmark
+            </button>
+          </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- A Venue has many fans -->
+      
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-info">
+              Fans
+            </li>
+      
+            <% @venue.fans.each do |user| %>
+              <li class="list-group-item">
+                <a href="/users/<%= user.id %>">
+                  <%= user.username %>
+                </a>
+                <div class="btn-group btn-group-xs float-right">
+                  <a href="/users/<%= user.id %>" class="btn btn-primary">
+                    <i class="fa fa-search-plus"></i>
+                  </a>
+                  <a href="/users/<%= user.id %>/edit" class="btn btn-warning">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a href="/delete_user/<%= user.id %>" class="btn btn-danger" rel="nofollow">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- A Venue has many specialties -->
+      
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-info">
+              Specialties
+            </li>
+      
+            <% @venue.specialties.each do |dish| %>
+              <li class="list-group-item">
+                <a href="/dishes/<%= dish.id %>">
+                  <%= dish.name %>
+                </a>
+                <div class="btn-group btn-group-xs float-right">
+                  <a href="/dishes/<%= dish.id %>" class="btn btn-primary">
+                    <i class="fa fa-search-plus"></i>
+                  </a>
+                  <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a href="/delete_dish/<%= dish.id %>" class="btn btn-danger" rel="nofollow">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
-<!-- A Venue has many bookmarks -->
-
-<div class="row">
-  <div class="col-md-12">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        Bookmarks
-      </li>
-
-      <% @venue.bookmarks.each do |bookmark| %>
-        <li class="list-group-item">
-          <a href="/bookmarks/<%= bookmark.id %>">
-            <%= bookmark.notes %>
-          </a>
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/bookmarks/<%= bookmark.id %>" class="btn btn-primary">
-              <i class="fa fa-search-plus"></i>
-            </a>
-            <a href="/bookmarks/<%= bookmark.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
-            </a>
-            <a href="/delete_bookmark/<%= bookmark.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
-        </li>
-      <% end %>
-
-      <li class="list-group-item">
-        <form action="/create_bookmark" method="post">
-
-      <!-- Label and input for dish_id -->
-      <div class="form-group">
-        <label for="dish_id" class="control-label">
-          Dish
-        </label>
-
-        <%= select_tag(:dish_id, options_from_collection_for_select(Dish.all, :id, :name), :class => "form-control") %>
-      </div>
-
-      <!-- Label and input for venue_id -->
-      <input type="hidden" name="venue_id" value="<%= @venue.id %>">
-
-      <!-- Label and input for user_id -->
-      <input type="hidden" name="user_id" value="<%= current_user.id %>">
-
-      <!-- Label and input for notes -->
-      <div class="form-group">
-        <label for="notes" class="control-label">
-          Notes
-        </label>
-
-        <textarea id="notes" name="notes" placeholder="Notes" class="form-control" rows="3"></textarea>
-      </div>
-
-      <button class="btn btn-block btn-success">
-        Create Bookmark
-      </button>
-    </form>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- A Venue has many fans -->
-
-<div class="row">
-  <div class="col-md-12">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        Fans
-      </li>
-
-      <% @venue.fans.each do |user| %>
-        <li class="list-group-item">
-          <a href="/users/<%= user.id %>">
-            <%= user.username %>
-          </a>
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/users/<%= user.id %>" class="btn btn-primary">
-              <i class="fa fa-search-plus"></i>
-            </a>
-            <a href="/users/<%= user.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
-            </a>
-            <a href="/delete_user/<%= user.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-
-<!-- A Venue has many specialties -->
-
-<div class="row">
-  <div class="col-md-12">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        Specialties
-      </li>
-
-      <% @venue.specialties.each do |dish| %>
-        <li class="list-group-item">
-          <a href="/dishes/<%= dish.id %>">
-            <%= dish.name %>
-          </a>
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/dishes/<%= dish.id %>" class="btn btn-primary">
-              <i class="fa fa-search-plus"></i>
-            </a>
-            <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
-            </a>
-            <a href="/delete_dish/<%= dish.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+  
+  <!--padding-->
+  <div class = "col-md-3"></div>
 </div>
 
 
