@@ -31,8 +31,22 @@ class VenuesController < ApplicationController
     @venue = Venue.new
 
     @venue.name = params.fetch("name")
-    @venue.address = params.fetch("address")
     @venue.neighborhood_id = params.fetch("neighborhood_id")
+    
+    sanitized_street_address = URI.encode(params.fetch("address"))
+    
+    #API keys
+    url_geo = "https://maps.googleapis.com/maps/api/geocode/json?address=#{sanitized_street_address}&key=AIzaSyA5qwIlcKjijP_Ptmv46mk4cCjuWhSzS78"
+    
+    raw_data_geo = open(url_geo).read
+  
+    parsed_data_geo = JSON.parse(raw_data_geo)
+  
+    @venue.address_latitude = parsed_data_geo["results"][0]["geometry"]["location"]["lat"]
+    @venue.address_longitude = parsed_data_geo["results"][0]["geometry"]["location"]["lng"]
+    
+    #get formatted address
+    @venue.address = parsed_data_geo["results"][0]["formatted_address"]
 
     save_status = @venue.save
 
