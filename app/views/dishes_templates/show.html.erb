@@ -42,18 +42,21 @@
       
        <% @dish.specialists.each do |venue| %>
         <li class="list-group-item">
-          <a href="/venues/<%= venue.id %>">
-            <%= venue.name %>
-          </a>
-
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
+          <p>
+            <a href="/venues/<%= venue.id %>">
+              <%= venue.name %>
             </a>
-            <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
+          </p>
+  
+            <div class="btn-group btn-group-xs float-right">
+              <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">
+                <i class="fa fa-trash-o"></i>
+              </a>
+            </div>
+          
         </li>
       <% end %>
       
