@@ -39,7 +39,7 @@
               <!--only display the user's bookmarks-->
               <% if (bookmark.user_id == current_user.id) %>
                 <li class="list-group-item">
-                  <a href="/bookmarks/<%= bookmark.id %>">
+                  <a href="/venues/<%=@venue.id%>">
                     <%= Dish.find(bookmark.dish_id).name %>
                   </a>
                   <div class="btn-group btn-group-xs float-right">

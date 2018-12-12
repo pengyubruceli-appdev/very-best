@@ -1,103 +1,72 @@
-<div class="page-header">
-  <h3>Dish #<%= @dish.id %></h3>
-</div>
-
-<div class="row">
-  <div class="col-md-12 mb-2">
-    <dl class="dl-horizontal">
-      <dt>Name</dt>
-      <dd><%= @dish.name %></dd>
-
-      <dt>Cuisine</dt>
-      <dd>
-        <% if @dish.cuisine.present? %>
-          <a href="/cuisines/<%= @dish.cuisine_id %>">
-            <%= @dish.cuisine.name %>
-          </a>
-        <% end %>
-      </dd>
-
-    </dl>
-
-    <div class="btn-group btn-group-justified">
-      <a href="/dishes" class="btn btn-primary">
-        Back
-      </a>
-      <a href="/dishes/<%= @dish.id %>/edit" class="btn btn-warning">
-        Edit
-      </a>
-      <a href="/delete_dish/<%= @dish.id %>" class="btn btn-danger" rel="nofollow">
-        Delete
-      </a>
-    </div>
-  </div>
-</div>
-
 <!-- A Dish has many bookmarks -->
 
 <div class="row">
-  <div class="col-md-12">
+  <div class = "col-md-3">
+    <!--padding-->
+  </div>
+  
+  <div class="col-md-6">
     <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
+      <li class="list-group-item list-group-item-secondary">
         <h4>
           You loved the <%= @dish.name %> at
+          
+          <div class = "badge badge-primary float-right">
+            <%= Cuisine.find(@dish.cuisine_id).name %>
+          </div>
         </h4>
       </li>
 
-      <% @dish.specialists.each do |venue| %>
+      <li class="list-group-item">
+        <form class = "form-inline float-left" action="/create_bookmark" method="post">
+          <!-- Label and input for dish_id -->
+          <input type="hidden" name="dish_id" value="<%= @dish.id %>">
+    
+          <!-- Label and input for venue_id -->
+          <div class="form-group mr-sm-1">
+            <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name), :class => "form-control") %>
+          </div>
+    
+          <!-- Label and input for user_id -->
+          <input type="hidden" name="user_id" value="<%= current_user.id %>">
+    
+          <!-- Label and input for notes -->
+          <input type = "hidden" name = "notes" value = "">
+          
+          
+          <button class="btn btn-primary">
+            <i class = "fa fa-heart"></i>
+          </button>
+        </form>
+      </li>
+      
+       <% @dish.specialists.each do |venue| %>
         <li class="list-group-item">
-          <p>
-            <a href="/venues/<%= venue.id %>">
-              <%= venue.name %>
-            </a>
+          <a href="/venues/<%= venue.id %>">
+            <%= venue.name %>
+          </a>
 
-            <div class="btn-group btn-group-xs float-right">
-              <a href="/venues/<%= venue.id %>" class="btn btn-primary">
-                <i class="fa fa-search-plus"></i>
-              </a>
-              <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">
-                <i class="fa fa-edit"></i>
-              </a>
-              <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">
-                <i class="fa fa-trash-o"></i>
-              </a>
-            </div>
-          </p>
+          <div class="btn-group btn-group-xs float-right">
+            <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">
+              <i class="fa fa-edit"></i>
+            </a>
+            <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">
+              <i class="fa fa-trash-o"></i>
+            </a>
+          </div>
         </li>
       <% end %>
-
-      <li class="list-group-item">
-        <form action="/create_bookmark" method="post">
-
-      <!-- Label and input for dish_id -->
-      <input type="hidden" name="dish_id" value="<%= @dish.id %>">
-
-      <!-- Label and input for venue_id -->
-      <div class="form-group">
-        <label for="venue_id" class="control-label">
-          Venue
-        </label>
-
-        <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name), :class => "form-control") %>
-      </div>
-
-      <!-- Label and input for user_id -->
-      <input type="hidden" name="user_id" value="<%= current_user.id %>">
-
-      <!-- Label and input for notes -->
-      <div class="form-group">
-        <label for="notes" class="control-label">
-          Notes
-        </label>
-
-        <textarea id="notes" name="notes" placeholder="Notes" class="form-control" rows="3"></textarea>
-      </div>
-
-      <button class="btn btn-block btn-success">
-        Create Bookmark
-      </button>
-    </form>
+      
+      <li class = "list-group-item list-group-item secondary">
+        <a href = "/dishes" class = "btn btn-secondary btn-block">
+          <i class = "fa fa-chevron-left"></i>
+        </a>
       </li>
+
     </ul>
+  
+  </div>
+  <div class = "col-md-3">
+    <!--padding-->
   </div>
 </div>
