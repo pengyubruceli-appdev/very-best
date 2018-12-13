@@ -9,6 +9,25 @@ class DishesController < ApplicationController
   def show
     @bookmark = Bookmark.new
     @dish = Dish.find(params.fetch("id"))
+    
+    time_ago_sec = Time.now - Dish.find(params.fetch("id")).updated_at
+    
+    time_ago_min = time_ago_sec / 60
+    
+    time_ago_hr = time_ago_min / 60
+    
+    time_ago_day = time_ago_hr / 24
+    
+    if time_ago_min < 60
+      @time_ago = time_ago_min.round()
+      @unit = "minutes ago"
+    elsif time_ago_hr < 24
+      @time_ago = time_ago_hr.round()
+      @unit = "hours ago"
+    else
+      @time_ago = time_ago_day.round()
+      @unit = "days ago"
+    end
 
     render("dishes_templates/show.html.erb")
   end

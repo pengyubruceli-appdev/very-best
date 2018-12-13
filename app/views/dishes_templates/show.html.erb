@@ -9,7 +9,7 @@
     <ul class="list-group">
       <li class="list-group-item list-group-item-secondary">
         <h4>
-          You loved the <%= @dish.name %> at
+          You loved the <%= @dish.name %> at...
           
           <div class = "badge badge-primary float-right">
             <%= Cuisine.find(@dish.cuisine_id).name %>
@@ -46,16 +46,17 @@
             <a href="/venues/<%= venue.id %>">
               <%= venue.name %>
             </a>
-          </p>
-  
-            <div class="btn-group btn-group-xs float-right">
-              <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">
+        
+            <small class = "float-right text-muted">
+              <%= @time_ago %> <%= @unit %>
+              <a href="/venues/<%= venue.id %>/edit">
                 <i class="fa fa-edit"></i>
               </a>
-              <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">
+              <a href="/delete_venue/<%= venue.id %>">
                 <i class="fa fa-trash-o"></i>
               </a>
-            </div>
+            </small>
+          </p>
           
         </li>
       <% end %>
