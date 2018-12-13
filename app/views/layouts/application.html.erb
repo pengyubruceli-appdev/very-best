@@ -35,8 +35,20 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a class="nav-link" href="/dishes">Dishes</a></li>
-          <li class="nav-item"><a class="nav-link" href="/venues">Venues</a></li>
+          <!--check if current page is dishes or venues to determine which navbar to highlight-->
+          <!--https://apidock.com/rails/ActionView/Helpers/UrlHelper/current_page%3f-->
+          <% if current_page?("/dishes") %>
+            <li class="nav-item active"><a class="nav-link" href="/dishes">Dishes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/venues">Venues</a></li>
+          <% elsif current_page?("/venues") %>
+            <li class="nav-item"><a class="nav-link" href="/dishes">Dishes</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/venues">Venues</a></li>
+          <% else %>
+            <!--just display the regular nav bar-->
+            <li class="nav-item"><a class="nav-link" href="/dishes">Dishes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/venues">Venues</a></li>
+          <% end %>
+          
         </ul>
         <ul class="navbar-nav ml-auto">
           <% if current_user.present? %>
